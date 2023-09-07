@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Rodar manualmente a query abaixo após rodar as migrations
+// para salvar o campo duração com o tipo Time ao invés de Datetime (não suportado pelo prisma)
+// RODAR A QUERY APENAS DEPOIS DE TER RODADO TODAS AS MIGRATIONS!!
+
+// ALTER TABLE "Music" DROP COLUMN "duration",
+// ADD COLUMN     "duration" TIME NOT NULL;
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int        @id @default(autoincrement())
+  name           String
+  email          String     @unique
+  ownedPlaylists Playlist[] @relation("OwnedPlaylists")
+  likedPlaylists Likes[]
+  albuns         Album[]
+}
+
+model Playlist {
+  id          Int               @id @default(autoincrement())
+  name        String
+  genre       String
+  description String
+  owner       User              @relation("OwnedPlaylists", fields: [ownerId], references: [id])
+  ownerId     Int
+  likes       Likes[]
+  music       MusicToPlaylist[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model Likes {
+  user       User?    @relation(fields: [userId], references: [id])
+  userId     Int
+  createdAt  DateTime @default(now())
+  playlist   Playlist @relation(fields: [playlistId], references: [id])
+  playlistId Int
+
+  @@id([userId, playlistId])
+}
+
+model Music {
+  id          Int               @id @default(autoincrement())
+  name        String
+  description String
+  duration DateTime @db.Time()
+  album       Album             @relation(fields: [albumId], references: [id])
+  albumId     Int
+  playlists   MusicToPlaylist[]
+  createdAt   DateTime          @default(now())
+}
+
+model MusicToPlaylist {
+  music      Music    @relation(fields: [musicId], references: [id])
+  musicId    Int
+  createdAt  DateTime @default(now())
+  playlist   Playlist @relation(fields: [playlistId], references: [id])
+  playlistId Int
+
+  @@id([musicId, playlistId])
+}
+
+model Album {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  artist      User     @relation(fields: [artistId], references: [id])
+  artistId    Int
+  released    Boolean
+  music       Music[]
+}
