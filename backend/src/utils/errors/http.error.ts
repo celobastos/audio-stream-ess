@@ -23,7 +23,8 @@ export abstract class HttpError extends Error {
   }
 
   toString() {
-    return `[${this.name}]: msg: ${this.msg}, msgCode: ${this.msgCode}, status: ${this.status}, stack: ${this.stack}`;
+    return `[${this.name}]: msg: ${this.msg}, msgCode: ${this.msgCode},
+    status: ${this.status}, stack: ${this.stack}`;
   }
 }
 

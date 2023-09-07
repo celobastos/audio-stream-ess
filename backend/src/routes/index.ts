@@ -16,7 +16,7 @@ export default (app: Express) => {
     prefix,
     new TestController(router, di.getService(TestService)).router,
     new AlbumController(router, di.getService(TestService)).router,
+    new ArtistController(router, di.getService(ArtistService)).router,
     new PlaylistController(router, di.getService(PlaylistService)).router,
   );
-  app.use(prefix, new ArtistController(router, di.getService(ArtistService)).router);
 };
