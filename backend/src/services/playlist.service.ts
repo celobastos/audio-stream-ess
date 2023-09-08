@@ -24,6 +24,18 @@ class PlaylistService {
 
     return playlist;
   }
+  public async getPlaylistLikesDetails(playlistId: number) {
+    return this.playlistRepository.getPlaylistLikesDetails(playlistId);
+  }
+  
+  public async addLikeToPlaylist(playlistId: number, userId: number) {
+    return this.playlistRepository.addLikeToPlaylist(playlistId, userId);
+  }
+  
+  public async removeLikeFromPlaylist(playlistId: number, userId: number) {
+    return this.playlistRepository.removeLikeFromPlaylist(playlistId, userId);
+  }
+  
 
   // public async createPlaylist(data: PlaylistEntity): Promise<PlaylistModel> {
   //   const playlistEntity = await this.playlistRepository.createPlaylist(data);

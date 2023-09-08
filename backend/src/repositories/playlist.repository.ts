@@ -9,6 +9,7 @@ class PlaylistRepository {
   }
 
   public async getPlaylists(): Promise<Playlist[]> {
+
     return await this.db.playlist.findMany();
   }
 
@@ -27,7 +28,6 @@ class PlaylistRepository {
   public async deletePlaylist(id: number): Promise<void> {
     await this.db.playlist.delete({ where: { id: id } });
   }
-
   public async getPlaylistLikesDetails(
     playlistId: number,
   ): Promise<{ count: number; users: Array<{ id: number; name: string }> }> {

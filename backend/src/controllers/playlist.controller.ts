@@ -18,6 +18,19 @@ class PlaylistController {
     this.router.get(`${this.prefix}/:id`, (req: Request, res: Response) =>
       this.getPlaylist(req, res),
     );
+    this.router.get(`${this.prefix}/:id/likes`, (req: Request, res: Response) => 
+    this.getPlaylistLikesDetails(req, res)
+    );
+
+    this.router.post(`${this.prefix}/:id/likes/:userId`, (req: Request, res: Response) => 
+    this.addLikeToPlaylist(req, res)
+    );
+
+    this.router.delete(`${this.prefix}/:id/likes/:userId`, (req: Request, res: Response) => 
+    this.removeLikeFromPlaylist(req, res)
+    );
+
+
     // this.router.post(this.prefix,
     // (req: Request, res: Response) => this.createPlaylist(req, res));
     // this.router.put(`${this.prefix}/:id`, (req: Request, res: Response) =>
@@ -58,6 +71,63 @@ class PlaylistController {
       }).handle(res);
     }
   }
+  private async getPlaylistLikesDetails(req: Request, res: Response) {
+    try {
+      const playlistLikesDetails = await this.playlistService.getPlaylistLikesDetails(+req.params.id);
+      return new SuccessResult({
+        msg: Result.transformRequestOnMsg(req),
+        data: playlistLikesDetails,
+      }).handle(res);
+    } catch {
+      return new FailureResult({
+        msg: Result.transformRequestOnMsg(req),
+        code: 404,
+        msgCode: 'failure',
+      }).handle(res);
+    }
+  }
+
+  private async addLikeToPlaylist(req: Request, res: Response) {
+    try {
+      await this.playlistService.addLikeToPlaylist(+req.params.id, +req.params.userId);
+      return new SuccessResult({
+        msg: "Successfully added like to playlist.",
+      }).handle(res);
+    } catch (error) {
+      let errorMessage = "Failed to add like to playlist.";
+      if (error instanceof Error) {
+          errorMessage = error.message;
+      }
+      return new FailureResult({
+        msg: errorMessage,
+        code: 500,
+        msgCode: 'failure',
+      }).handle(res);
+    }
+  }
+  
+  
+  private async removeLikeFromPlaylist(req: Request, res: Response) {
+    try {
+      await this.playlistService.removeLikeFromPlaylist(+req.params.id, +req.params.userId);
+      return new SuccessResult({
+        msg: "Successfully removed like from playlist.",
+      }).handle(res);
+    } catch (error) {
+      let errorMessage = "Failed to remove like from playlist.";
+      if (error instanceof Error) {
+          errorMessage = error.message;
+      }
+      return new FailureResult({
+        msg: errorMessage,
+        code: 500,
+        msgCode: 'failure',
+      }).handle(res);
+    }
+  }
+  
+  
+  
 
   // private async createPlaylist(req: Request, res: Response) {
   //   const playlist = new PlaylistEntity(req.body);
