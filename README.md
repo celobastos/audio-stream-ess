@@ -26,3 +26,10 @@ npx prisma migrate dev
 ```
 npx prisma generate
 ```
+# Telas do Projeto
+
+![image](https://github.com/user-attachments/assets/c0e9d985-8e88-417e-a970-482cc48c39d6)
+![image](https://github.com/user-attachments/assets/ee9adf61-ab55-4e23-a317-337e1f2e97ac)
+![image](https://github.com/user-attachments/assets/4d5695ac-fab4-4c1d-b281-bbe53243fae5)
+
+
